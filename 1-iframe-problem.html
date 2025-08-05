@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problem: PDF Iframe on Safari</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: #dc3545;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .content {
+            padding: 20px;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        .viewer-container {
+            height: 600px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .code-block {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+        .device-info {
+            background-color: #e2e3e5;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        .navigation {
+            text-align: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .nav-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 0 10px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .nav-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚨 Problem: PDF Iframe on Safari</h1>
+            <p>Demonstrating the iPhone Safari PDF pagination issue</p>
+        </div>
+        
+        <div class="content">
+            <div class="device-info">
+                <strong>Your Device:</strong> <span id="deviceInfo"></span><br>
+                <strong>Browser:</strong> <span id="browserInfo"></span><br>
+                <strong>User Agent:</strong> <span id="userAgent"></span>
+            </div>
+
+            <div class="warning">
+                <h3>⚠️ Known Issue</h3>
+                <p><strong>iPhone Safari:</strong> This iframe will only show the first page of the PDF and won't allow navigation to other pages.</p>
+                <p><strong>Other browsers:</strong> Should work normally with full PDF navigation.</p>
+            </div>
+
+            <h2>Current Implementation (Problematic)</h2>
+            <div class="viewer-container">
+                <iframe src="https://travel.everbridge.com/assets/docs/PR-DS-EN-Allergies.pdf" title="PDF in Iframe"></iframe>
+            </div>
+
+            <div class="code-block">
+<strong>React/TypeScript Implementation:</strong>
+&lt;iframe 
+    title={fileName} 
+    src={fileUrl} 
+    width="100%" 
+    height="100%"
+&gt;&lt;/iframe&gt;
+
+<strong>HTML Implementation:</strong>
+&lt;iframe 
+    src="https://travel.everbridge.com/assets/docs/PR-DS-EN-Allergies.pdf" 
+    title="PDF in Iframe"
+&gt;&lt;/iframe&gt;
+            </div>
+
+            <h3>Test Instructions</h3>
+            <ol>
+                <li><strong>On iPhone Safari:</strong> You should only see the first page, no navigation controls</li>
+                <li><strong>On Desktop browsers:</strong> You should see full PDF with navigation</li>
+                <li><strong>Try scrolling/swiping:</strong> iPhone Safari won't navigate to next pages</li>
+            </ol>
+        </div>
+
+        <div class="navigation">
+            <a href="../pdf-safari-demo.html" class="nav-button">← Back to Overview</a>
+            <a href="2-object-solution.html" class="nav-button">Next: Object Tag Solution →</a>
+        </div>
+    </div>
+
+    <script>
+        // Display device information
+        const userAgent = navigator.userAgent;
+        const platform = navigator.platform;
+        const screenSize = `${screen.width}x${screen.height}`;
+        
+        document.getElementById('deviceInfo').textContent = `${platform} - ${screenSize}`;
+        document.getElementById('userAgent').textContent = userAgent;
+        
+        // Detect browser
+        let browserInfo = 'Unknown';
+        if (userAgent.includes('iPhone') || userAgent.includes('iPad')) {
+            if (userAgent.includes('Safari') && !userAgent.includes('Chrome')) {
+                browserInfo = '📱 iPhone/iPad Safari (PROBLEMATIC for PDF)';
+            } else if (userAgent.includes('Chrome')) {
+                browserInfo = '📱 iPhone/iPad Chrome';
+            }
+        } else if (userAgent.includes('Safari') && !userAgent.includes('Chrome')) {
+            browserInfo = '🖥️ Desktop Safari';
+        } else if (userAgent.includes('Chrome')) {
+            browserInfo = '🖥️ Desktop Chrome';
+        } else if (userAgent.includes('Firefox')) {
+            browserInfo = '🖥️ Firefox';
+        }
+        
+        document.getElementById('browserInfo').textContent = browserInfo;
+    </script>
+</body>
+</html>

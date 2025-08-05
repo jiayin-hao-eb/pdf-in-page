@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solution: Hybrid Smart Detection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .content {
+            padding: 20px;
+        }
+        .solution {
+            background: linear-gradient(135deg, #667eea20, #764ba220);
+            border: 1px solid #667eea;
+            color: #333;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        .viewer-container {
+            height: 600px;
+            border: 2px solid #667eea;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 20px 0;
+            position: relative;
+        }
+        iframe, object {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .code-block {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+        .device-info {
+            background-color: #e2e3e5;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        .navigation {
+            text-align: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .nav-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 0 10px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .nav-button:hover {
+            background-color: #0056b3;
+        }
+        .detection-info {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        .method-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            z-index: 10;
+        }
+        .reload-button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        .reload-button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Solution: Hybrid Smart Detection</h1>
+            <p>Automatically chooses the best PDF rendering method for each device</p>
+        </div>
+        
+        <div class="content">
+            <div class="device-info">
+                <strong>Your Device:</strong> <span id="deviceInfo"></span><br>
+                <strong>Browser:</strong> <span id="browserInfo"></span><br>
+                <strong>Detected Method:</strong> <span id="detectedMethod"></span><br>
+                <strong>Reason:</strong> <span id="methodReason"></span>
+            </div>
+
+            <div class="solution">
+                <h3>🎯 Smart Hybrid Approach</h3>
+                <p>This solution automatically detects your device and browser, then chooses the optimal PDF rendering method:</p>
+                <ul>
+                    <li><strong>iPhone/iPad Safari:</strong> Uses Object tag (fixes pagination issue)</li>
+                    <li><strong>Desktop/Other Mobile:</strong> Uses PDF.js (enhanced experience)</li>
+                    <li><strong>Fallback:</strong> Provides download option if rendering fails</li>
+                </ul>
+            </div>
+
+            <div class="detection-info">
+                <h4>🔍 Detection Logic</h4>
+                <div id="detectionLogic"></div>
+            </div>
+
+            <h2>Hybrid PDF Viewer</h2>
+            <button class="reload-button" onclick="loadHybridViewer()">🔄 Reload with Detection</button>
+            
+            <div class="viewer-container" id="hybridViewer">
+                <div class="method-indicator" id="methodIndicator">Loading...</div>
+                <!-- PDF will be loaded here by JavaScript -->
+            </div>
+
+            <div class="code-block">
+<strong>React/TypeScript Implementation:</strong>
+const detectDevice = () => {
+    const userAgent = navigator.userAgent;
+    return {
+        isIOS: /iPad|iPhone|iPod/.test(userAgent),
+        isSafari: /Safari/.test(userAgent) && !/Chrome/.test(userAgent),
+        isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent)
+    };
+};
+
+const PDFViewer = ({ fileUrl, fileName }) => {
+    const [renderMethod, setRenderMethod] = useState('iframe');
+    
+    useEffect(() => {
+        const device = detectDevice();
+        
+        if (device.isIOS && device.isSafari) {
+            setRenderMethod('object'); // Fix Safari pagination
+        } else {
+            setRenderMethod('pdfjs');  // Enhanced experience
+        }
+    }, []);
+
+    switch (renderMethod) {
+        case 'object':
+            return (
+                &lt;object data={fileUrl} type="application/pdf"&gt;
+                    &lt;p&gt;PDF not supported. &lt;a href={fileUrl}&gt;Download&lt;/a&gt;&lt;/p&gt;
+                &lt;/object&gt;
+            );
+        case 'pdfjs':
+            const encodedUrl = encodeURIComponent(fileUrl);
+            return (
+                &lt;iframe src={`https://mozilla.github.io/pdf.js/web/viewer.html?file=${encodedUrl}`} /&gt;
+            );
+        default:
+            return &lt;iframe src={fileUrl} /&gt;;
+    }
+};
+
+<strong>JavaScript Implementation:</strong>
+function loadHybridViewer() {
+    const container = document.getElementById('hybridViewer');
+    const pdfUrl = 'https://travel.everbridge.com/assets/docs/PR-DS-EN-Allergies.pdf';
+    
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+    
+    if (isIOS && isSafari) {
+        // Use object tag for iOS Safari
+        container.innerHTML = `
+            &lt;object data="${pdfUrl}" type="application/pdf" style="width:100%;height:100%;"&gt;
+                &lt;p&gt;PDF not supported. &lt;a href="${pdfUrl}" target="_blank"&gt;Open in new tab&lt;/a&gt;&lt;/p&gt;
+            &lt;/object&gt;
+        `;
+    } else {
+        // Use PDF.js for other browsers
+        const encodedUrl = encodeURIComponent(pdfUrl);
+        container.innerHTML = `
+            &lt;iframe src="https://mozilla.github.io/pdf.js/web/viewer.html?file=${encodedUrl}" 
+                    style="width:100%;height:100%;border:none;"&gt;&lt;/iframe&gt;
+        `;
+    }
+}
+            </div>
+
+            <h3>Why This Approach Works Best</h3>
+            <ul>
+                <li>✅ <strong>Automatic:</strong> No manual configuration needed</li>
+                <li>✅ <strong>Optimized:</strong> Each device gets the best possible experience</li>
+                <li>✅ <strong>Future-proof:</strong> Easy to add new detection rules</li>
+                <li>✅ <strong>Fallback-safe:</strong> Always provides a way to access the PDF</li>
+                <li>✅ <strong>Performance:</strong> Uses native rendering when possible</li>
+                <li>✅ <strong>Consistency:</strong> Maintains same API across all solutions</li>
+            </ul>
+
+            <h3>Production Implementation</h3>
+            <p>Simply replace your current FileViewer component with the ImprovedFileViewer component. The API remains the same, but the PDF rendering will automatically adapt to each user's device and browser.</p>
+        </div>
+
+        <div class="navigation">
+            <a href="3-pdfjs-solution.html" class="nav-button">← Previous: PDF.js Solution</a>
+            <a href="5-comparison.html" class="nav-button">Next: Comparison →</a>
+        </div>
+    </div>
+
+    <script>
+        // Display device information
+        const userAgent = navigator.userAgent;
+        const platform = navigator.platform;
+        const screenSize = `${screen.width}x${screen.height}`;
+        
+        document.getElementById('deviceInfo').textContent = `${platform} - ${screenSize}`;
+        
+        // Detect browser and method
+        let browserInfo = 'Unknown';
+        let detectedMethod = 'iframe';
+        let methodReason = 'Default fallback';
+        let detectionLogic = '';
+        
+        const isIOS = /iPad|iPhone|iPod/.test(userAgent);
+        const isSafari = /Safari/.test(userAgent) && !/Chrome/.test(userAgent);
+        const isAndroid = /Android/.test(userAgent);
+        const isChrome = /Chrome/.test(userAgent);
+        const isFirefox = /Firefox/.test(userAgent);
+        
+        if (isIOS) {
+            if (isSafari) {
+                browserInfo = '📱 iPhone/iPad Safari';
+                detectedMethod = 'Object Tag';
+                methodReason = 'iOS Safari needs object tag to fix PDF pagination issue';
+                detectionLogic = `
+                    <strong>Detection Result:</strong><br>
+                    • iOS Device: ✅ Yes<br>
+                    • Safari Browser: ✅ Yes<br>
+                    • <strong>→ Using Object Tag</strong> (fixes pagination issue)
+                `;
+            } else if (isChrome) {
+                browserInfo = '📱 iPhone/iPad Chrome';
+                detectedMethod = 'PDF.js';
+                methodReason = 'iOS Chrome works well with PDF.js';
+                detectionLogic = `
+                    <strong>Detection Result:</strong><br>
+                    • iOS Device: ✅ Yes<br>
+                    • Safari Browser: ❌ No (Chrome)<br>
+                    • <strong>→ Using PDF.js</strong> (enhanced experience)
+                `;
+            }
+        } else if (isSafari) {
+            browserInfo = '🖥️ Desktop Safari';
+            detectedMethod = 'PDF.js';
+            methodReason = 'Desktop Safari works great with PDF.js';
+            detectionLogic = `
+                <strong>Detection Result:</strong><br>
+                • iOS Device: ❌ No<br>
+                • Desktop Safari: ✅ Yes<br>
+                • <strong>→ Using PDF.js</strong> (enhanced experience)
+            `;
+        } else if (isChrome) {
+            browserInfo = '🖥️ Desktop Chrome';
+            detectedMethod = 'PDF.js';
+            methodReason = 'Chrome has excellent PDF.js support';
+            detectionLogic = `
+                <strong>Detection Result:</strong><br>
+                • iOS Device: ❌ No<br>
+                • Chrome Browser: ✅ Yes<br>
+                • <strong>→ Using PDF.js</strong> (enhanced experience)
+            `;
+        } else if (isFirefox) {
+            browserInfo = '🖥️ Firefox';
+            detectedMethod = 'PDF.js';
+            methodReason = 'Firefox has built-in PDF.js support';
+            detectionLogic = `
+                <strong>Detection Result:</strong><br>
+                • iOS Device: ❌ No<br>
+                • Firefox Browser: ✅ Yes<br>
+                • <strong>→ Using PDF.js</strong> (native built-in support)
+            `;
+        } else if (isAndroid) {
+            browserInfo = '📱 Android Browser';
+            detectedMethod = 'PDF.js';
+            methodReason = 'Android browsers work well with PDF.js';
+            detectionLogic = `
+                <strong>Detection Result:</strong><br>
+                • Android Device: ✅ Yes<br>
+                • <strong>→ Using PDF.js</strong> (enhanced mobile experience)
+            `;
+        }
+        
+        document.getElementById('browserInfo').textContent = browserInfo;
+        document.getElementById('detectedMethod').textContent = detectedMethod;
+        document.getElementById('methodReason').textContent = methodReason;
+        document.getElementById('detectionLogic').innerHTML = detectionLogic;
+
+        function loadHybridViewer() {
+            const container = document.getElementById('hybridViewer');
+            const methodIndicator = document.getElementById('methodIndicator');
+            const pdfUrl = 'https://travel.everbridge.com/assets/docs/PR-DS-EN-Allergies.pdf';
+            
+            if (isIOS && isSafari) {
+                // Use object tag for iOS Safari
+                methodIndicator.textContent = 'Method: Object Tag (iOS Safari Fix)';
+                methodIndicator.style.background = 'rgba(40, 167, 69, 0.9)';
+                
+                container.innerHTML = `
+                    <div class="method-indicator" style="background: rgba(40, 167, 69, 0.9);">Method: Object Tag (iOS Safari Fix)</div>
+                    <object data="${pdfUrl}" type="application/pdf" style="width:100%;height:100%;">
+                        <div style="text-align:center;padding:40px;">
+                            <h3>PDF Viewer Not Available</h3>
+                            <p>Your browser doesn't support embedded PDF viewing.</p>
+                            <a href="${pdfUrl}" target="_blank" style="background:#28a745;color:white;padding:12px 24px;text-decoration:none;border-radius:4px;">Open PDF in New Tab</a>
+                        </div>
+                    </object>
+                `;
+            } else {
+                // Use PDF.js for other browsers
+                methodIndicator.textContent = 'Method: PDF.js (Enhanced Experience)';
+                methodIndicator.style.background = 'rgba(255, 107, 53, 0.9)';
+                
+                const encodedUrl = encodeURIComponent(pdfUrl);
+                container.innerHTML = `
+                    <div class="method-indicator" style="background: rgba(255, 107, 53, 0.9);">Method: PDF.js (Enhanced Experience)</div>
+                    <iframe src="https://mozilla.github.io/pdf.js/web/viewer.html?file=${encodedUrl}" 
+                            style="width:100%;height:100%;border:none;"></iframe>
+                `;
+            }
+        }
+
+        // Auto-load hybrid viewer on page load
+        window.addEventListener('load', loadHybridViewer);
+    </script>
+</body>
+</html>

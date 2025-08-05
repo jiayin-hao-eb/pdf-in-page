@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solution: PDF.js Viewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: #ff6b35;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .content {
+            padding: 20px;
+        }
+        .solution {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        .viewer-container {
+            height: 600px;
+            border: 2px solid #ff6b35;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .code-block {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+        .device-info {
+            background-color: #e2e3e5;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        .navigation {
+            text-align: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .nav-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 0 10px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .nav-button:hover {
+            background-color: #0056b3;
+        }
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .pros, .cons {
+            padding: 15px;
+            border-radius: 4px;
+        }
+        .pros {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+        }
+        .cons {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔥 Solution: PDF.js Viewer</h1>
+            <p>Cross-browser PDF rendering with full control</p>
+        </div>
+        
+        <div class="content">
+            <div class="device-info">
+                <strong>Your Device:</strong> <span id="deviceInfo"></span><br>
+                <strong>Browser:</strong> <span id="browserInfo"></span><br>
+                <strong>PDF.js Status:</strong> <span id="pdfjsStatus"></span>
+            </div>
+
+            <div class="solution">
+                <h3>🔥 PDF.js - The Universal Solution</h3>
+                <p>PDF.js is Mozilla's JavaScript PDF renderer that works consistently across all browsers and devices, including iPhone Safari.</p>
+            </div>
+
+            <h2>PDF.js Implementation</h2>
+            <div class="viewer-container">
+                <iframe src="https://mozilla.github.io/pdf.js/web/viewer.html?file=https://travel.everbridge.com/assets/docs/PR-DS-EN-Allergies.pdf"></iframe>
+            </div>
+
+            <div class="code-block">
+<strong>React/TypeScript Implementation:</strong>
+const encodedUrl = encodeURIComponent(fileUrl);
+const pdfJsUrl = `https://mozilla.github.io/pdf.js/web/viewer.html?file=${encodedUrl}`;
+
+&lt;iframe
+    title={fileName}
+    src={pdfJsUrl}
+    width="100%"
+    height="100%"
+/&gt;
+
+<strong>HTML Implementation:</strong>
+&lt;iframe 
+    src="https://mozilla.github.io/pdf.js/web/viewer.html?file=https://travel.everbridge.com/assets/docs/PR-DS-EN-Allergies.pdf"
+&gt;&lt;/iframe&gt;
+
+<strong>Local PDF.js Installation (Recommended for Production):</strong>
+npm install pdfjs-dist
+// Then use local viewer instead of CDN
+            </div>
+
+            <div class="pros-cons">
+                <div class="pros">
+                    <h4>✅ Advantages</h4>
+                    <ul>
+                        <li>Works on ALL browsers including iPhone Safari</li>
+                        <li>Consistent UI and behavior everywhere</li>
+                        <li>Full PDF navigation and zoom controls</li>
+                        <li>Search functionality built-in</li>
+                        <li>Customizable toolbar and controls</li>
+                        <li>No browser PDF plugin dependencies</li>
+                        <li>Supports password-protected PDFs</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h4>⚠️ Considerations</h4>
+                    <ul>
+                        <li>Requires external CDN or local installation</li>
+                        <li>Slightly larger resource footprint</li>
+                        <li>May be slower for very large PDFs</li>
+                        <li>Requires JavaScript to be enabled</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Test Instructions</h3>
+            <ol>
+                <li><strong>All Devices:</strong> Should show consistent PDF viewer interface</li>
+                <li><strong>Navigation:</strong> Use toolbar buttons or arrow keys to navigate</li>
+                <li><strong>Zoom:</strong> Use + / - buttons or pinch gestures</li>
+                <li><strong>Search:</strong> Use Ctrl+F (Cmd+F on Mac) to search within PDF</li>
+                <li><strong>Download:</strong> Use download button in toolbar</li>
+            </ol>
+
+            <h3>PDF.js Features</h3>
+            <ul>
+                <li>🔍 <strong>Search:</strong> Full-text search within PDF</li>
+                <li>📄 <strong>Page Navigation:</strong> Go to specific page numbers</li>
+                <li>🔍 <strong>Zoom Controls:</strong> Fit to page, fit to width, custom zoom</li>
+                <li>🖨️ <strong>Print Support:</strong> Direct printing from viewer</li>
+                <li>💾 <strong>Download:</strong> Save PDF locally</li>
+                <li>📱 <strong>Mobile Optimized:</strong> Touch-friendly controls</li>
+                <li>🎨 <strong>Customizable:</strong> Can modify toolbar and appearance</li>
+            </ul>
+
+            <h3>When to Use PDF.js</h3>
+            <ul>
+                <li>✅ <strong>Best for:</strong> Cross-browser consistency</li>
+                <li>✅ <strong>Perfect for:</strong> Complex PDFs with forms or annotations</li>
+                <li>✅ <strong>Ideal for:</strong> When you need search functionality</li>
+                <li>✅ <strong>Great for:</strong> Custom PDF viewer requirements</li>
+                <li>⚠️ <strong>Consider alternatives for:</strong> Very simple PDF viewing needs</li>
+            </ul>
+        </div>
+
+        <div class="navigation">
+            <a href="2-object-solution.html" class="nav-button">← Previous: Object Tag</a>
+            <a href="4-hybrid-solution.html" class="nav-button">Next: Hybrid Solution →</a>
+        </div>
+    </div>
+
+    <script>
+        // Display device information
+        const userAgent = navigator.userAgent;
+        const platform = navigator.platform;
+        const screenSize = `${screen.width}x${screen.height}`;
+        
+        document.getElementById('deviceInfo').textContent = `${platform} - ${screenSize}`;
+        
+        // Detect browser
+        let browserInfo = 'Unknown';
+        let pdfjsStatus = 'Should work perfectly';
+        
+        if (userAgent.includes('iPhone') || userAgent.includes('iPad')) {
+            if (userAgent.includes('Safari') && !userAgent.includes('Chrome')) {
+                browserInfo = '📱 iPhone/iPad Safari';
+                pdfjsStatus = '✅ EXCELLENT - Solves Safari PDF issues!';
+            } else if (userAgent.includes('Chrome')) {
+                browserInfo = '📱 iPhone/iPad Chrome';
+                pdfjsStatus = '✅ Excellent support';
+            }
+        } else if (userAgent.includes('Safari') && !userAgent.includes('Chrome')) {
+            browserInfo = '🖥️ Desktop Safari';
+            pdfjsStatus = '✅ Excellent support';
+        } else if (userAgent.includes('Chrome')) {
+            browserInfo = '🖥️ Desktop Chrome';
+            pdfjsStatus = '✅ Excellent support';
+        } else if (userAgent.includes('Firefox')) {
+            browserInfo = '🖥️ Firefox';
+            pdfjsStatus = '✅ Native PDF.js support (built-in)';
+        }
+        
+        document.getElementById('browserInfo').textContent = browserInfo;
+        document.getElementById('pdfjsStatus').textContent = pdfjsStatus;
+    </script>
+</body>
+</html>
